@@ -159,72 +159,8 @@ class ARAStar_Planner:
                 self.extract_path(current_state)
             ))
 
-    #* student implemented
-    def initialize(self):
-        self.g[self.goal] = np.inf
-        self.g[self.start] = 0
-        self.OPEN.clear()
-        self.CLOSED.clear()
-        self.INCONS.clear()
-        self.PARENTS.clear()  #^ new
-        self.OPEN[self.start] = self.f(self.start)
-        self.PARENTS[self.start] = self.start  #^ new
-        self.alg_history.clear()  #^ new
-        self.paths_found.clear()  #^ new
 
-    #* student implemented
-    def improve_path(self):
-        self.save_alg_state(self.start)  #^ new
-        while self.f(self.goal) > min(self.f(s) for s in self.OPEN):
-            s = self.get_next_state()
-            self.OPEN.pop(s)
-            self.CLOSED.add(s)
-
-            for sprime in self.neighbors(s):
-                if sprime not in self.g:  # unvisited
-                    self.g[sprime] = np.inf
-
-                new_cost = self.g[s] + self.cost(s, sprime)
-                if self.g[sprime] > new_cost:
-                    self.g[sprime] = new_cost
-                    self.PARENTS[sprime] = s  #^ new
-
-                    if sprime not in self.CLOSED:
-                        self.OPEN[sprime]  = self.f(sprime)
-                    else:
-                        self.INCONS.add(sprime)
-            self.save_alg_state(s)  #^ new
-
-    #* student implemented
-    def calc_epsilon_prime(self):
-        open_plus_incons = list(self.OPEN.keys()) + list(self.INCONS)
-        if open_plus_incons:
-            v = min(self.g[s] + self.h(s) for s in open_plus_incons)
-        else:
-            v = np.inf
-
-        return min(self.epsilon, self.g[self.goal] / v)
-
-    #* student implemented
-    def run(self):
-        self.initialize()  #^ new, optional
-        self.improve_path()
-        epsilon_prime = self.calc_epsilon_prime()  #^ new, optional
-        self.publish_path()
-
-        while epsilon_prime > 1:
-            self.epsilon = max(1, self.epsilon - self.stepsize)
-
-            while self.INCONS:
-                self.OPEN[self.INCONS.pop()] = 0
-            self.OPEN = {s: self.f(s) for s in self.OPEN}
-
-            self.CLOSED.clear()
-            self.improve_path()
-            epsilon_prime = self.calc_epsilon_prime()  #^ new, optional
-            self.publish_path()
-
-
+#* student implemented
 def initialize(planner: ARAStar_Planner):
     planner.g[planner.goal] = np.inf
     planner.g[planner.start] = 0
@@ -238,7 +174,7 @@ def initialize(planner: ARAStar_Planner):
     planner.paths_found.clear()  #^ new
 
 
-    #* student implemented
+#* student implemented
 def improve_path(planner: ARAStar_Planner):
     planner.save_alg_state(planner.start)  #^ new
     while planner.f(planner.goal) > min(planner.f(s) for s in planner.OPEN):
@@ -261,7 +197,7 @@ def improve_path(planner: ARAStar_Planner):
                     planner.INCONS.add(sprime)
         planner.save_alg_state(s)  #^ new
 
-    #* student implemented
+#* student implemented
 def calc_epsilon_prime(planner: ARAStar_Planner):
     open_plus_incons = list(planner.OPEN.keys()) + list(planner.INCONS)
     if open_plus_incons:
@@ -272,6 +208,7 @@ def calc_epsilon_prime(planner: ARAStar_Planner):
     return min(planner.epsilon, planner.g[planner.goal] / v)
 
 
+#* student implemented
 def run(planner: ARAStar_Planner):
     initialize(planner)  #^ new, optional
     improve_path(planner)
