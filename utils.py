@@ -390,6 +390,8 @@ class ARAStar_Planner:
             ))
 
     def path_cost(self, epsilon: float) -> float:
+        """Calculates the total cost for the path found using the given
+        epsilon value. If no path exists for this epsilon, returns 0."""
         path = self.paths_found.get(epsilon)
         if not path:
             return 0
@@ -400,4 +402,5 @@ class ARAStar_Planner:
         return cost
 
     def all_path_costs(self) -> dict[float: float]:
+        """Returns path costs for all found paths."""
         return {eps: self.path_cost(eps) for eps in self.paths_found}
