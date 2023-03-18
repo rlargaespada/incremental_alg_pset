@@ -9,7 +9,6 @@ import ipywidgets as widgets
 from matplotlib.colors import ListedColormap, BoundaryNorm
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
-# from matplotlib.widgets import Button as mpl_Button
 
 
 def in_notebook() -> bool:
@@ -128,14 +127,6 @@ class ARAStar_Plotter:
                 marker=self.PATH_MARKER, linestyle='none')  # plot path start/end markers
         ax.plot(self.goal.y + 0.5, self.goal.x + 0.5, color=self.GOAL_COLOR,
                 marker=self.PATH_MARKER, linestyle='none')  # plot goal marker
-
-    # def add_script_widgets(self, fig: plt.Figure) -> None:
-    #     axbackward = fig.add_axes([0.45, 0.05, 0.05, 0.05])
-    #     axforward = fig.add_axes([0.51, 0.05, 0.05, 0.05])
-    #     bbackward = mpl_Button(axbackward, '\u25C0', hovercolor='skyblue')
-    #     bforward = mpl_Button(axforward, '\u25B6', hovercolor='skyblue')
-    #     bbackward.on_clicked(lambda _: select_ax(self._selected_axes[epsilon] - 1))
-    #     bforward.on_clicked(lambda _: select_ax(self._selected_axes[epsilon] + 1))
 
     def plot_episode(self, epsilon: float, history: list[ARAStar_State]):
         with plt.ioff():
