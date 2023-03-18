@@ -20,16 +20,28 @@ def test_initalize(fn):
     start = State(0, 0)
     goal = State(6, 5)
     planner = ARAStar_Planner(GRAPH_SMALL, start, goal, 2.5, stepsize=1)
+
+    # write garbage into planner to make sure it's cleared
+    planner.OPEN = {1: 1, 2: 2, 3: 3}
+    planner.CLOSED = {1, 2, 3}
+    planner.INCONS = {1, 2, 3}
+    planner.PARENTS = {1: 1, 2: 2, 3: 3}
+    planner.alg_history[1].append(1)  # modify defaultdict
+    planner.paths_found = {1: 1, 2: 2, 3: 3}
+
     fn(planner)
 
+    # verify planner initial state
     assert_equal(planner.g, {goal: np.inf, start: 0})
     assert_almost_equal(planner.OPEN[start], 19.525624189766635)
+    assert_equal(len(planner.OPEN), 1)
     assert_equal(planner.CLOSED, set())
     assert_equal(planner.INCONS, set())
     assert_equal(planner.PARENTS, {start: start})
-    assert_equal(planner.alg_history, dict())
-    assert_equal(planner.paths_found, dict())
+    assert_equal(planner.alg_history, {})
+    assert_equal(planner.paths_found, {})
 
+    # verify planner OPEN queue on larger graph
     start = State(24, 4)
     goal = State(4, 44)
     planner = ARAStar_Planner(GRAPH_LARGE, start, goal, 1.5, .2)
@@ -40,8 +52,10 @@ def test_initalize(fn):
 
 
 def _test_alg_hist(open_user: dict, open_soln: dict, closed_user: set, closed_soln: set):
+    # verify fvalues are correct for each state in OPEN queue
     for s, fval in open_soln.items():
         assert_almost_equal(fval, open_user.get(s, -1))
+    # verify CLOSED sets match
     assert_equal(closed_user, closed_soln)
 
 
@@ -54,6 +68,7 @@ def test_improve_path(fn, initialize):
     fn(planner)
     planner.publish_path()
 
+    # verify final path matches
     path = {eps: [
        State(x=0, y=0),
        State(x=1, y=1),
@@ -70,6 +85,7 @@ def test_improve_path(fn, initialize):
     assert_almost_equal(planner.path_cost(eps), 13.485281374238571)
     assert_equal(planner.paths_found, path)
 
+    # verify user history matches for first step of search
     user_hist = planner.alg_history[eps][1]
     OPEN_soln = {
         State(x=0, y=1): 19.027756377319946,
@@ -78,6 +94,7 @@ def test_improve_path(fn, initialize):
     CLOSED_soln = {start}
     _test_alg_hist(user_hist.OPEN, OPEN_soln, user_hist.CLOSED, CLOSED_soln)
 
+    # verify user history matches for second step of search
     user_hist = planner.alg_history[eps][2]
     OPEN_soln = {
         State(x=0, y=1): 19.027756377319946,
@@ -87,6 +104,7 @@ def test_improve_path(fn, initialize):
     CLOSED_soln = {start, State(x=1, y=1)}
     _test_alg_hist(user_hist.OPEN, OPEN_soln, user_hist.CLOSED, CLOSED_soln)
 
+    # verify user history matches for third step of search
     user_hist = planner.alg_history[eps][3]
     OPEN_soln = {
         State(x=0, y=1): 19.027756377319946,
@@ -97,6 +115,7 @@ def test_improve_path(fn, initialize):
     CLOSED_soln = {start, State(x=1, y=1), State(x=2, y=1)}
     _test_alg_hist(user_hist.OPEN, OPEN_soln, user_hist.CLOSED, CLOSED_soln)
 
+    # verify user history matches for last step of search
     user_hist = planner.alg_history[eps][-1]
     OPEN_soln = {
         State(x=0, y=1): 19.027756377319946,
@@ -145,6 +164,7 @@ def test_run(fn):
     planner = ARAStar_Planner(GRAPH_LARGE, State(24, 4), State(4, 44), 1.5, .2)
     fn(planner)
 
+    # verify path costs match for each path found
     path_costs_soln = {
         1.5: 55.11269837220807,
         1.3: 55.11269837220807,
@@ -153,6 +173,8 @@ def test_run(fn):
     for eps, cost in path_costs_soln.items():
         assert_almost_equal(planner.path_cost(eps), cost)
 
+    # verify paths go in expected directions by checking that certain
+    # states are included in each path
     paths_found_soln = {
         1.5: State(x=0, y=29),
         1.3: State(x=0, y=29),
