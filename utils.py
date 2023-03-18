@@ -1,4 +1,5 @@
 from collections import defaultdict
+from itertools import tee
 from typing import NamedTuple
 from dataclasses import dataclass
 
@@ -9,6 +10,13 @@ import ipywidgets as widgets
 from matplotlib.colors import ListedColormap, BoundaryNorm
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
+
+
+def _pairwise(iterable):
+    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+    a, b = tee(iterable)
+    next(b, None)
+    return zip(a, b)
 
 
 def in_notebook() -> bool:
@@ -380,3 +388,16 @@ class ARAStar_Planner:
                 self.INCONS.copy(),
                 self.extract_path(current_state)
             ))
+
+    def path_cost(self, epsilon: float) -> float:
+        path = self.paths_found.get(epsilon)
+        if not path:
+            return 0
+
+        cost = 0
+        for s1, s2 in _pairwise(path):
+            cost += self.cost(s1, s2)
+        return cost
+
+    def all_path_costs(self) -> dict[float: float]:
+        return {eps: self.path_cost(eps) for eps in self.paths_found}

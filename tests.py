@@ -55,7 +55,7 @@ def test_improve_path(fn, initialize):
     planner.publish_path()
 
     path = {eps: [
-        State(x=0, y=0),
+       State(x=0, y=0),
        State(x=1, y=1),
        State(x=2, y=1),
        State(x=3, y=1),
@@ -67,6 +67,7 @@ def test_improve_path(fn, initialize):
        State(x=4, y=5),
        State(x=5, y=5),
        State(x=6, y=5)]}
+    assert_almost_equal(planner.path_cost(eps), 13.485281374238571)
     assert_equal(planner.paths_found, path)
 
     user_hist = planner.alg_history[eps][1]
@@ -143,6 +144,14 @@ def test_calc_epsilon_prime(fn, improve_path, initialize):
 def test_run(fn):
     planner = ARAStar_Planner(GRAPH_LARGE, State(24, 4), State(4, 44), 1.5, .2)
     fn(planner)
+
+    path_costs_soln = {
+        1.5: 55.11269837220807,
+        1.3: 55.11269837220807,
+        1.1: 53.455844122715675,
+        1: 51.59797974644663}
+    for eps, cost in path_costs_soln.items():
+        assert_almost_equal(planner.path_cost(eps), cost)
 
     paths_found_soln = {
         1: [State(x=24, y=4),
