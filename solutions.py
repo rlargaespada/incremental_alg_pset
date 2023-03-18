@@ -72,12 +72,12 @@ def run(planner: ARAStar_Planner):
 
 if __name__ == '__main__':
     test = ARAStar_Planner(GRAPH_LARGE, State(24, 4), State(4, 44), 1.5, .2)
-    run(test)
-    print(test.all_path_costs())
     plotter = ARAStar_Plotter(GRAPH_LARGE, State(24, 4), State(4, 44))
+    plotter.visualize_graph()
+    run(test)
+    plotter.plot_paths_found(test.paths_found)
 
     test = ARAStar_Planner(GRAPH_SMALL, State(0, 0), State(6, 5), 2.5, 1)
     plotter = ARAStar_Plotter(GRAPH_SMALL, State(0, 0), State(6, 5))
-
     run(test)
     plotter.plot_paths_found(test.paths_found)
