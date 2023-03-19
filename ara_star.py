@@ -1,4 +1,3 @@
-from collections import defaultdict
 from itertools import tee
 
 import numpy as np
@@ -75,7 +74,7 @@ class ARAStar_Planner:
         self.INCONS = set()
         self.PARENTS = {}
 
-        self.alg_history = defaultdict(list)
+        self.alg_history = {}
         self.paths_found = {}
 
     def h(self, state: State) -> int:
@@ -161,7 +160,8 @@ class ARAStar_Planner:
     def save_alg_state(self, current_state: State):
         """Saves current path and values of OPEN, CLOSED, and INCONS states
         to alg history for use in testing and plotting."""
-        self.alg_history[self.epsilon].append(ARAStar_State(
+        hist = self.alg_history.setdefault(self.epsilon, [])
+        hist.append(ARAStar_State(
                 self.OPEN.copy(),
                 self.CLOSED.copy(),
                 self.INCONS.copy(),
