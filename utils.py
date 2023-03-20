@@ -148,7 +148,7 @@ class ARAStar_Plotter:
                               edgecolors='k', linewidth=0.5)
             self._add_path(ax, alg_state.current_path)
 
-            ax.set_title(rf'Anytime Replanning A*, $\epsilon={epsilon}$, '
+            ax.set_title(rf'Anytime Repairing A*, $\epsilon={epsilon}$, '
                          f'Iteration {i}')
             ax.invert_yaxis()  # do this otherwise graph looks upside down
             ax.xaxis.set_tick_params(labeltop=True, labelbottom=False, bottom=False)
@@ -198,7 +198,7 @@ class ARAStar_Plotter:
                             edgecolors='k', linewidth=0.5)
         self._add_path(ax, alg_state.current_path)
 
-        ax.set_title(rf'Anytime Replanning A*, $\epsilon={epsilon}$')
+        ax.set_title(rf'Anytime Repairing A*, $\epsilon={epsilon}$')
         ax.invert_yaxis()  # do this otherwise graph looks upside down
         ax.xaxis.set_tick_params(labeltop=True, labelbottom=False, bottom=False)
         self._add_legend(ax)
@@ -212,7 +212,7 @@ class ARAStar_Plotter:
 
         ax.pcolormesh(self.graph, cmap=self.COLORMAP, norm=self.COLOR_BOUNDS,
                                     edgecolors='k', linewidth=0.5)
-        ax.set_title('Anytime Replanning A*: All Paths Found')
+        ax.set_title('Anytime Repairing A*: All Paths Found')
         ax.invert_yaxis()  # do this otherwise graph looks upside down
         ax.xaxis.set_tick_params(labeltop=True, labelbottom=False, bottom=False)
 
