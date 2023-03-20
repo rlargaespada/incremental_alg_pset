@@ -3,7 +3,8 @@ import numpy as np
 from IPython.display import display_html
 from nose.tools import assert_equal, assert_almost_equal
 
-from utils import State, ARAStar_Planner, GRAPH_LARGE, GRAPH_SMALL, in_notebook
+from utils import State, GRAPH_LARGE, GRAPH_SMALL, in_notebook
+from ara_star import ARAStar_Planner
 
 
 def test_ok():

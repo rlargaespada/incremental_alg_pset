@@ -1,5 +1,6 @@
 import numpy as np
-from utils import State, ARAStar_Planner, GRAPH_LARGE, GRAPH_SMALL, ARAStar_Plotter
+from utils import State, GRAPH_LARGE, GRAPH_SMALL, ARAStar_Plotter
+from ara_star import ARAStar_Planner
 
 
 #* student implemented
@@ -73,7 +74,6 @@ def run(planner: ARAStar_Planner):
 if __name__ == '__main__':
     test = ARAStar_Planner(GRAPH_LARGE, State(24, 4), State(4, 44), 1.5, .2)
     plotter = ARAStar_Plotter(GRAPH_LARGE, State(24, 4), State(4, 44))
-    plotter.visualize_graph()
     run(test)
     plotter.plot_paths_found(test.paths_found)
 
