@@ -27,7 +27,7 @@ def test_initalize(fn):
     planner.CLOSED = {1, 2, 3}
     planner.INCONS = {1, 2, 3}
     planner.PARENTS = {1: 1, 2: 2, 3: 3}
-    planner.alg_history[1].append(1)  # modify defaultdict
+    planner.alg_history[1] = [1]
     planner.paths_found = {1: 1, 2: 2, 3: 3}
 
     fn(planner)
